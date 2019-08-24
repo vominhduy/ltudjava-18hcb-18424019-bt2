@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
-"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/manage?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">123456</property>
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <mapping resource="pojo/SinhVien.hbm.xml"/>
-    </session-factory>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/manage?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">123456</property>
+    <mapping resource="pojo/Class.hbm.xml"/>
+    <mapping resource="pojo/Remark.hbm.xml"/>
+    <mapping resource="pojo/ClassObjectStudent.hbm.xml"/>
+    <mapping resource="pojo/RemarkDetail.hbm.xml"/>
+    <mapping resource="pojo/Object.hbm.xml"/>
+    <mapping resource="pojo/Student.hbm.xml"/>
+  </session-factory>
 </hibernate-configuration>

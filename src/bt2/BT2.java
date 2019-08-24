@@ -5,9 +5,9 @@
 */
 package bt2;
 
-import dao.SinhVienDAO;
+import dao.StudentDAO;
 import java.util.List;
-import pojo.SinhVien;
+//import pojo.Student;
 
 /**
  *
@@ -19,15 +19,7 @@ public class BT2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Login lg = new Login();
+        frmLogin lg = new frmLogin();
         lg.show();
-        // TODO code application logic here
-        List<SinhVien> ds=SinhVienDAO.layDanhSachSinhVien();
-        for(int i=0; i<ds.size(); i++){
-            SinhVien sv=ds.get(i);
-            System.out.println("MSSV: "+sv.getCode());
-            System.out.println("Họ và tên: "+sv.getName());
-        }
-        
     }
 }
