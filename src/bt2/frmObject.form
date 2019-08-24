@@ -99,6 +99,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Nh&#x1ead;p th&#x1edd;i kh&#xf3;a bi&#x1ec3;u"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAdd">
       <Properties>

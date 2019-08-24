@@ -5,7 +5,9 @@
 */
 package bt2;
 
+import dao.ClassDAO;
 import dao.StudentDAO;
+import pojo.Class;
 import java.util.List;
 //import pojo.Student;
 
@@ -19,6 +21,7 @@ public class BT2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        List<Class> temp = ClassDAO.getClasses();
         frmLogin lg = new frmLogin();
         lg.show();
     }

@@ -8,10 +8,23 @@ package bt2;
 import dao.ClassDAO;
 import dao.ClassObjectStudentDAO;
 import dao.ObjectDAO;
+import dao.StudentDAO;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pojo.ClassObjectStudent;
 import pojo.Object;
+import pojo.Student;
+import pojo.Class;
 
 /**
  *
@@ -67,6 +80,11 @@ public class frmObject extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnImport.setText("Nhập thời khóa biểu");
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportActionPerformed(evt);
+            }
+        });
 
         btnAdd.setText("Thêm sinh viên vào môn học");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +190,97 @@ public class frmObject extends javax.swing.JDialog {
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
+        // TODO add your handling code here:
+        
+        // TODO add your handling code here:
+        boolean existed = false;
+        FileInputStream f = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+        File selectedFile = null;
+        Scanner input = null;
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+
+        try {
+            f = new FileInputStream(selectedFile.getAbsolutePath()); //tao bien tep f
+            input = new Scanner(f,"UTF-8");
+
+            while(input.hasNextLine()) //trong khi chưa het file
+            {
+                String line = input.nextLine(); //doc 1 dong
+                if(line.trim()!="") //neu dong khong phai rong
+                {
+
+                    String item[] = line.split(","); //cat cac thong tin cua line bang dau phay
+
+                    String classCode = item[0];
+
+                    Object tmpSd = new Object();
+                    ClassObjectStudent tnpCls = new ClassObjectStudent();
+                    
+                    
+
+                    tmpSd.setCode(item[1]);
+                    tmpSd.setName(item[2]);
+                    tmpSd.setRoom(item[3]);
+                    
+                    tnpCls.setClassCode(item[0]);
+                    tnpCls.setObjectCode(item[1]);
+                    
+                    if (ClassDAO.getClass(tnpCls.getClassCode()) == null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Không tồn tại mã lớp học.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    else
+                    {
+                        List<Student> students = StudentDAO.getStudentsByClass(tnpCls.getClassCode());
+                        
+                        for (int i = 0; i < students.size(); i++) {
+                            tnpCls.setStudentCode(students.get(i).getCode());
+                            if (!ClassObjectStudentDAO.AddObject(tnpCls))
+                            {
+                                // false
+                                existed = true;
+                            }
+                        }
+                        if (!ObjectDAO.AddObject(tmpSd))
+                        {
+                            //false
+                            existed = true;
+                        }
+                    }
+                }
+            }
+            if (existed)
+                JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+        }        finally {
+            if (existed)
+            {
+                System.out.println("Tồn tại dữ liệu.");
+            }
+            if (f != null)
+            try {
+                f.close();
+            } catch (IOException ex) {
+                Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (input != null)
+            input.close();
+        }
+    }//GEN-LAST:event_btnImportActionPerformed
 
     /**
      * @param args the command line arguments

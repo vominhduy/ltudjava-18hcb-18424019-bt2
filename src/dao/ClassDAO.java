@@ -37,6 +37,27 @@ public class ClassDAO {
         return ds;
     }
     
+    public static Class getClass(String code) {
+        List<Class> ds = null;
+        Class obj = null;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        Session session = sessionFactory.openSession();
+        
+        try {
+            String hql = "SELECT sv FROM Class sv WHERE sv.code =:code";
+            Query query = session.createQuery(hql);
+            query.setString("code", code);
+            ds = query.list();
+            obj = ds.get(0);
+        } catch (HibernateException ex) {
+//Log the exception
+            System.err.println(ex);
+        } finally {
+            session.close();
+        }
+        return obj;
+    }
+    
      public static boolean AddClass(Class _class)
     {
         boolean kq = false;
