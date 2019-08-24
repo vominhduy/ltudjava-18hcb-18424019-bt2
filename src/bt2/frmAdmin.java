@@ -93,6 +93,9 @@ public class frmAdmin extends javax.swing.JDialog {
 
     private void btnObjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObjectActionPerformed
         // TODO add your handling code here:
+        frmObject frm = new frmObject(null, true);
+        frm.show();
+        frm.dispose();
     }//GEN-LAST:event_btnObjectActionPerformed
 
     /**

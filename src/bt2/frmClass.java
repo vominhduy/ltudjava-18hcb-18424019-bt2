@@ -199,7 +199,7 @@ public class frmClass extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (FileNotFoundException ex) {
-            Logger.getLogger(frmdClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
         }        finally {
             if (existed)
             {
@@ -209,7 +209,7 @@ public class frmClass extends javax.swing.JDialog {
             try {
                 f.close();
             } catch (IOException ex) {
-                Logger.getLogger(frmdClass.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (input != null)
             input.close();
