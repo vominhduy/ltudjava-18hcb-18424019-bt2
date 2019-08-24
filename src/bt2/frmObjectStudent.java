@@ -10,6 +10,7 @@ import dao.ClassObjectStudentDAO;
 import dao.ObjectDAO;
 import dao.StudentDAO;
 import java.util.List;
+import javax.swing.JOptionPane;
 import pojo.ClassObjectStudent;
 import pojo.Student;
 import pojo.Object;
@@ -88,6 +89,11 @@ public class frmObjectStudent extends javax.swing.JDialog {
         });
 
         btnSave.setText("Lưu");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Hủy");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -170,6 +176,30 @@ public class frmObjectStudent extends javax.swing.JDialog {
     private void cboStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboStudentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboStudentActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        String classCode = cboClass.getSelectedItem().toString();
+        String objectCode = cboObject.getSelectedItem().toString();
+        String studentCode = cboStudent.getSelectedItem().toString();
+        
+        objectCode = objectCode.substring(0, objectCode.indexOf(" - "));
+        studentCode = studentCode.substring(0, studentCode.indexOf(" - "));
+        
+        JOptionPane.showMessageDialog(null, objectCode + " - " + studentCode, "", JOptionPane.INFORMATION_MESSAGE);
+       
+        List<ClassObjectStudent> tmps = ClassObjectStudentDAO.getObjects(classCode, objectCode, studentCode);
+        
+        if (tmps != null && tmps.size() > 0)
+            JOptionPane.showMessageDialog(null, "Sinh viên đã đăng ký môn học này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        else
+        {
+            if (ClassObjectStudentDAO.AddObject(new ClassObjectStudent(0, classCode, objectCode, studentCode)))
+                JOptionPane.showMessageDialog(null, "Thêm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Thêm thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
      * @param args the command line arguments
