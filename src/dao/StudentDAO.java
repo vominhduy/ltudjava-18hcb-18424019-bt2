@@ -76,23 +76,24 @@ public class StudentDAO {
         return kq;
     }
     
-    public static boolean getObject(Student student)
+    public static Student getStudent(String code)
     {
-        boolean kq = false;
+        List<Student> ds = null;
+        Student std = null;
         SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
-        
-        Session session = sessionFactory.getCurrentSession();
-        Transaction trans = session.getTransaction();
+        Session session = sessionFactory.openSession();
         try {
-            trans.begin();
-            session.save(student);
-            trans.commit();
-            kq = true;
-        } catch (Exception ex) {
-            kq = false;
-            trans.rollback();
-            System.out.println("ERROR BT2: " + ex.getMessage());
+            String hql = "FROM pojo.Student sv WHERE sv.code =:code";
+            Query query = session.createQuery(hql);
+            query.setString("code", code);
+            ds = query.list();
+            std = ds.get(0);
+        } catch (HibernateException ex) {
+//Log the exception
+            System.err.println(ex);
+        } finally {
+            session.close();
         }
-        return kq;
+        return std;
     }
 }

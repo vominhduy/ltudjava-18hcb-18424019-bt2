@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import pojo.ClassObjectStudent;
 import pojo.Object;
@@ -101,6 +103,14 @@ public class frmObject extends javax.swing.JDialog {
 
             }
         ));
+        tblObject.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblObjectMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tblObjectMouseEntered(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblObject);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -161,6 +171,10 @@ public class frmObject extends javax.swing.JDialog {
         String className = cboClass.getSelectedItem().toString();
         classObjectStudents = ClassObjectStudentDAO.getObjectByClass(className);
         
+        ArrayList<String> tmpClsObjStu = new ArrayList<>();
+        
+        
+        
         String [] ColumNames = {"STT", "Mã lớp", "Mã môn", "Tên môn", "Phòng học"};
         DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
         
@@ -169,9 +183,13 @@ public class frmObject extends javax.swing.JDialog {
         {
             ClassObjectStudent a = (ClassObjectStudent)classObjectStudents.get(i);
             
+            if (tmpClsObjStu.contains(a.getObjectCode()))
+                continue;
+            
             Object tmpObj = ObjectDAO.getObject(a.getObjectCode());
             if (tmpObj != null)
             {
+                tmpClsObjStu.add(tmpObj.getCode());
                 modeltable.insertRow(i, new java.lang.Object[]{i + 1, a.getClassCode(), a.getObjectCode(), tmpObj.getName(), tmpObj.getRoom()});
             }
         }
@@ -281,6 +299,28 @@ public class frmObject extends javax.swing.JDialog {
             input.close();
         }
     }//GEN-LAST:event_btnImportActionPerformed
+
+    private void tblObjectMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblObjectMouseEntered
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tblObjectMouseEntered
+
+    private void tblObjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblObjectMouseClicked
+        // TODO add your handling code here:
+        frmClassObject frm = new frmClassObject(null, true);
+        
+
+        int row = tblObject.getSelectedRow();
+        int column = 2;
+        String valueInCell = (String)tblObject.getValueAt(row, column);
+        String valueInCellName = (String)tblObject.getValueAt(row, 3);
+        
+        
+        frm.setDataCode(cboClass.getSelectedItem().toString(), valueInCell, valueInCellName);
+        
+        frm.show();
+        frm.dispose();
+    }//GEN-LAST:event_tblObjectMouseClicked
 
     /**
      * @param args the command line arguments
