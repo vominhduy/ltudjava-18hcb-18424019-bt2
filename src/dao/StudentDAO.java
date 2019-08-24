@@ -60,6 +60,7 @@ public class StudentDAO {
     {
         boolean kq = false;
         SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
         Session session = sessionFactory.getCurrentSession();
         Transaction trans = session.getTransaction();
         try {
@@ -68,7 +69,7 @@ public class StudentDAO {
             trans.commit();
         } catch (Exception ex) {
             kq = false;
-            System.out.println(ex.getMessage());
+            System.out.println("ERROR BT2: " + ex.getMessage());
         }
         return kq;
     }

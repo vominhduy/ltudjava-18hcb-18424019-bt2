@@ -5,10 +5,20 @@
 */
 package bt2;
 
+import dao.ClassDAO;
 import static dao.ClassDAO.getClasses;
 import dao.StudentDAO;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pojo.Student;
@@ -19,7 +29,7 @@ import pojo.Class;
  * @author vomin
  */
 public class frmClass extends javax.swing.JFrame {
-    List<Student> students = null; 
+    List<Student> students = null;
     List<Class> classes = null;
     /**
      * Creates new form frmClass
@@ -110,38 +120,114 @@ public class frmClass extends javax.swing.JFrame {
     
     private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
         // TODO add your handling code here:
-        String tenmh = cboClass.getSelectedItem().toString();
+        boolean existed = false;
+        FileInputStream f = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         
-        JOptionPane.showMessageDialog(this,
-        tenmh);
+        File selectedFile = null;
+        Scanner input = null;
         
-        String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"}; 
-        DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
-        for(int i = 0; i < students.size(); i++)
-        {     
-            Student a = (Student)students.get(i);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+        
+        try {
+            f = new FileInputStream(selectedFile.getAbsolutePath()); //tao bien tep f
+            input = new Scanner(f,"UTF-8");
             
-            if (a.getClassCode() == tenmh)
-                modeltable.insertRow(i, new Object[]{i + 1, a.getCode(), a.getCode(), a.getName(), a.getGender(), a.getPid()});
+            while(input.hasNextLine()) //trong khi chưa het file
+            {
+                String line = input.nextLine(); //doc 1 dong
+                if(line.trim()!="") //neu dong khong phai rong
+                {
+                    
+                    String item[] = line.split(","); //cat cac thong tin cua line bang dau phay
+                    
+                    String classCode = item[0];
+                    
+                    Student tmpSd = new Student();
+                    
+                    tmpSd.setCode(item[1]);
+                    tmpSd.setName(item[2]);
+                    tmpSd.setGender(item[3]);
+                    tmpSd.setPid(item[4]);
+                    tmpSd.setClassCode(item[0]);
+                    
+                    for (Iterator<Student> iterator = students.iterator(); iterator.hasNext();) {
+                        Student next = iterator.next();
+                        if (next.getCode().compareTo(tmpSd.getCode()) == 0)
+                        {
+                            existed = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!existed)
+                    {
+                        Class cls = new Class(tmpSd.getClassCode(), tmpSd.getClassCode());
+                        if (!classes.contains(cls))
+                        {
+                            classes.add(cls);
+                            ClassDAO.AddClass(cls);
+                        }
+                        
+                        if (StudentDAO.AddStudent(tmpSd))
+                        {
+                            students.add(tmpSd);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            if (existed)
+                JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+        }        finally {
+            if (existed)
+            {
+                System.out.println("Tồn tại dữ liệu.");
+            }
+            if (f != null)
+                try {
+                    f.close();
+            } catch (IOException ex) {
+                Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (input != null)
+                input.close();
         }
     }//GEN-LAST:event_btnImportActionPerformed
-
+    
     private void cboClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboClassActionPerformed
         // TODO add your handling code here:
         String tenmh = cboClass.getSelectedItem().toString();
         
-        String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"}; 
+        String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"};
         DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
         
         List<Student> tempStudents = StudentDAO.getStudentsByClass(tenmh);
         int row = 0;
         for(int i = 0; i < tempStudents.size(); i++)
-        {     
+        {
             Student a = (Student)tempStudents.get(i);
             
-          
-                modeltable.insertRow(i, new Object[]{i + 1, a.getCode(), a.getCode(), a.getName(), a.getGender(), a.getPid()});
-  
+            
+            modeltable.insertRow(i, new Object[]{i + 1, a.getCode(), a.getCode(), a.getName(), a.getGender(), a.getPid()});
+            
         }
         
         tblStudents.removeAll();
@@ -151,12 +237,12 @@ public class frmClass extends javax.swing.JFrame {
         tblStudents.getColumnModel().getColumn(0).setPreferredWidth(150);
         tblStudents.getColumnModel().getColumn(1).setPreferredWidth(300);
     }//GEN-LAST:event_cboClassActionPerformed
-
+    
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_formWindowClosed
-
+    
     private void cboClassPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboClassPropertyChange
         // TODO add your handling code here:
         // TODO add your handling code here:

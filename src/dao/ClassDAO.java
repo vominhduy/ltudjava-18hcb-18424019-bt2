@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import util.HibernateUtil;
 import pojo.Class;
 
@@ -34,5 +35,23 @@ public class ClassDAO {
             session.close();
         }
         return ds;
+    }
+    
+     public static boolean AddClass(Class _class)
+    {
+        boolean kq = false;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
+        Session session = sessionFactory.getCurrentSession();
+        Transaction trans = session.getTransaction();
+        try {
+            trans.begin();
+            session.save(_class);
+            trans.commit();
+        } catch (Exception ex) {
+            kq = false;
+            System.out.println("ERROR BT2: " + ex.getMessage());
+        }
+        return kq;
     }
 }
