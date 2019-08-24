@@ -67,8 +67,10 @@ public class StudentDAO {
             trans.begin();
             session.save(student);
             trans.commit();
+            kq = true;
         } catch (Exception ex) {
             kq = false;
+            trans.rollback();
             System.out.println("ERROR BT2: " + ex.getMessage());
         }
         return kq;

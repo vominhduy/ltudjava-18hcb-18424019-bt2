@@ -96,10 +96,10 @@ public class frmLogin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        this.disable();
-        frmAdmin frm = new frmAdmin();
+
+        frmAdmin frm = new frmAdmin(null, true);
         frm.show();
-        this.enable();
+        frm.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

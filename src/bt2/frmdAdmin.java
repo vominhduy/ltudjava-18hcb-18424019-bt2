@@ -9,13 +9,12 @@ package bt2;
  *
  * @author vomin
  */
-public class frmAdmin extends javax.swing.JDialog {
+public class frmdAdmin extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmAdmin
+     * Creates new form Admin
      */
-    public frmAdmin(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public frmdAdmin() {
         initComponents();
     }
 
@@ -33,7 +32,7 @@ public class frmAdmin extends javax.swing.JDialog {
         btnObject = new javax.swing.JButton();
         btnMark = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnClass.setText("Quản lý lớp học");
         btnClass.addActionListener(new java.awt.event.ActionListener() {
@@ -83,17 +82,17 @@ public class frmAdmin extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnObjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObjectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnObjectActionPerformed
+
     private void btnClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClassActionPerformed
         // TODO add your handling code here:
-
+        
         frmClass frm = new frmClass(null, true);
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_btnClassActionPerformed
-
-    private void btnObjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObjectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnObjectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -112,27 +111,23 @@ public class frmAdmin extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmdAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmdAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmdAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmdAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the dialog */
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frmAdmin dialog = new frmAdmin(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                new frmdAdmin().setVisible(true);
             }
         });
     }
