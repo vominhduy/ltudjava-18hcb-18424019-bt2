@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package bt2;
 
 import dao.ClassDAO;
@@ -27,7 +27,7 @@ import pojo.Class;
  * @author vomin
  */
 public class frmClass extends javax.swing.JDialog {
-
+    
     List<Student> students = null;
     List<Class> classes = null;
     /**
@@ -44,7 +44,7 @@ public class frmClass extends javax.swing.JDialog {
             cboClass.addItem(classes.get(i).getName());
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,45 +121,45 @@ public class frmClass extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
         // TODO add your handling code here:
         boolean existed = false;
         FileInputStream f = null;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-
+        
         File selectedFile = null;
         Scanner input = null;
-
+        
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = fileChooser.getSelectedFile();
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
         }
-
+        
         try {
             f = new FileInputStream(selectedFile.getAbsolutePath()); //tao bien tep f
             input = new Scanner(f,"UTF-8");
-
+            
             while(input.hasNextLine()) //trong khi chưa het file
             {
                 String line = input.nextLine(); //doc 1 dong
                 if(line.trim()!="") //neu dong khong phai rong
                 {
-
+                    
                     String item[] = line.split(","); //cat cac thong tin cua line bang dau phay
-
+                    
                     String classCode = item[0];
-
+                    
                     Student tmpSd = new Student();
-
+                    
                     tmpSd.setCode(item[1]);
                     tmpSd.setName(item[2]);
                     tmpSd.setGender(item[3]);
                     tmpSd.setPid(item[4]);
                     tmpSd.setClassCode(item[0]);
-
+                    
                     for (Iterator<Student> iterator = students.iterator(); iterator.hasNext();) {
                         Student next = iterator.next();
                         if (next.getCode().compareTo(tmpSd.getCode()) == 0)
@@ -168,7 +168,7 @@ public class frmClass extends javax.swing.JDialog {
                             break;
                         }
                     }
-
+                    
                     if (!existed)
                     {
                         Class cls = new Class(tmpSd.getClassCode(), tmpSd.getClassCode());
@@ -177,7 +177,7 @@ public class frmClass extends javax.swing.JDialog {
                             classes.add(cls);
                             ClassDAO.AddClass(cls);
                         }
-
+                        
                         if (StudentDAO.AddStudent(tmpSd))
                         {
                             students.add(tmpSd);
@@ -194,9 +194,9 @@ public class frmClass extends javax.swing.JDialog {
                 }
             }
             if (existed)
-            JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             else
-            JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (FileNotFoundException ex) {
             Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
@@ -206,47 +206,47 @@ public class frmClass extends javax.swing.JDialog {
                 System.out.println("Tồn tại dữ liệu.");
             }
             if (f != null)
-            try {
-                f.close();
-            } catch (IOException ex) {
-                Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                try {
+                    f.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+                }
             if (input != null)
-            input.close();
+                input.close();
         }
     }//GEN-LAST:event_btnImportActionPerformed
-
+    
     private void cboClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboClassActionPerformed
         // TODO add your handling code here:
         String tenmh = cboClass.getSelectedItem().toString();
-
+        
         String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"};
         DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
-
+        
         List<Student> tempStudents = StudentDAO.getStudentsByClass(tenmh);
         int row = 0;
         for(int i = 0; i < tempStudents.size(); i++)
         {
             Student a = (Student)tempStudents.get(i);
-
+            
             modeltable.insertRow(i, new Object[]{i + 1, a.getCode(), a.getCode(), a.getName(), a.getGender(), a.getPid()});
-
+            
         }
-
+        
         tblStudents.removeAll();
-
+        
         tblStudents.setModel(modeltable);
         //jTableDSSV.setRowHeight(30);
         tblStudents.getColumnModel().getColumn(0).setPreferredWidth(150);
         tblStudents.getColumnModel().getColumn(1).setPreferredWidth(300);
     }//GEN-LAST:event_cboClassActionPerformed
-
+    
     private void cboClassPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cboClassPropertyChange
         // TODO add your handling code here:
         // TODO add your handling code here:
-
+        
     }//GEN-LAST:event_cboClassPropertyChange
-
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         frmStudent frm = new frmStudent(null, true);
@@ -254,7 +254,7 @@ public class frmClass extends javax.swing.JDialog {
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */
@@ -262,8 +262,8 @@ public class frmClass extends javax.swing.JDialog {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -281,7 +281,7 @@ public class frmClass extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -296,7 +296,7 @@ public class frmClass extends javax.swing.JDialog {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImport;
     private javax.swing.JComboBox cboClass;

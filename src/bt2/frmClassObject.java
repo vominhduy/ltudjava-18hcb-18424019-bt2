@@ -9,6 +9,8 @@ import java.util.List;
 import pojo.ClassObjectStudent;
 import dao.ClassObjectStudentDAO;
 import dao.StudentDAO;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import pojo.Student;
 /**
@@ -36,25 +38,19 @@ public class frmClassObject extends javax.swing.JDialog {
         txtObject.setText(objectCode + " - " + objectName);
         
         List<ClassObjectStudent> clsObjStus = ClassObjectStudentDAO.getObjects(classCode, objectCode);
-        
+        String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"};
+        DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
         for (int i = 0; i < clsObjStus.size(); i++) {
             Student tmpStu = StudentDAO.getStudent(clsObjStus.get(i).getStudentCode());
             
             if (tmpStu != null)
             {
-                String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Giới tính", "CMND"};
-                DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
-                
-                
                 modeltable.insertRow(i, new Object[]{i + 1, tmpStu.getCode(), tmpStu.getName(), tmpStu.getGender(), tmpStu.getPid()});
-                    
-
-                
-                tblStudent.removeAll();
-                
-                tblStudent.setModel(modeltable);
             }
         }
+        tblStudent.removeAll();
+        
+        tblStudent.setModel(modeltable);
     }
     
     /**
@@ -84,16 +80,26 @@ public class frmClassObject extends javax.swing.JDialog {
 
         tblStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "STT", "MSSV", "Họ và tên", "Giới tính", "CMND"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblStudent.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(tblStudent);
+        tblStudent.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         btnDelete.setText("Xóa sinh viên");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +150,34 @@ public class frmClassObject extends javax.swing.JDialog {
     
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        int row = tblStudent.getSelectedRow();
         
+        if (row < 0)
+        {
+            JOptionPane.showMessageDialog(null, "Chưa chọn sinh viên.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        int column = 1;
+        String studentCode = (String)tblStudent.getValueAt(row, column);
+        
+        ClassObjectStudent tmp = ClassObjectStudentDAO.getObjects(classCode, objectCode, studentCode).get(0);
+        
+        if (tmp != null)
+        {
+            if (ClassObjectStudentDAO.RemoveClassObjectStudent(tmp))
+            {
+                JOptionPane.showMessageDialog(null, "Xóa thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                ((DefaultTableModel)tblStudent.getModel()).removeRow(row);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Xóa thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Không tồn tại sinh viên trong môn học.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
     
     /**

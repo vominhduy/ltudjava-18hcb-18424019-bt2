@@ -99,4 +99,24 @@ public class ClassObjectStudentDAO {
         }
         return kq;
     }
+    
+    public static boolean RemoveClassObjectStudent(ClassObjectStudent object)
+    {
+        boolean kq = false;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
+        Session session = sessionFactory.getCurrentSession();
+        Transaction trans = session.getTransaction();
+        try {
+            trans.begin();
+            session.delete(object);
+            trans.commit();
+            kq = true;
+        } catch (Exception ex) {
+            kq = false;
+            trans.rollback();
+            System.out.println("ERROR BT2: " + ex.getMessage());
+        }
+        return kq;
+    }
 }
