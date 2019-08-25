@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 25, 2019 9:30:35 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated Aug 25, 2019 10:05:30 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="pojo.ClassObjectStudent" table="class_object_student" catalog="manage" optimistic-lock="version">
         <id name="id" type="int">
@@ -17,17 +17,17 @@
         <property name="studentCode" type="string">
             <column name="StudentCode" length="20" not-null="true" />
         </property>
-        <property name="mark1" type="java.lang.Long">
-            <column name="Mark1" precision="10" scale="0" />
+        <property name="mark1" type="big_decimal">
+            <column name="Mark1" precision="3" scale="1" />
         </property>
-        <property name="mark2" type="java.lang.Long">
-            <column name="Mark2" precision="10" scale="0" />
+        <property name="mark2" type="big_decimal">
+            <column name="Mark2" precision="3" scale="1" />
         </property>
-        <property name="mark3" type="java.lang.Long">
-            <column name="Mark3" precision="10" scale="0" />
+        <property name="mark3" type="big_decimal">
+            <column name="Mark3" precision="3" scale="1" />
         </property>
-        <property name="mark4" type="java.lang.Long">
-            <column name="Mark4" precision="10" scale="0" />
+        <property name="mark4" type="big_decimal">
+            <column name="Mark4" precision="3" scale="1" />
         </property>
     </class>
 </hibernate-mapping>

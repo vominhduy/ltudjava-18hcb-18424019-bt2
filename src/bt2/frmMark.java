@@ -8,8 +8,19 @@ import dao.ClassDAO;
 import dao.ClassObjectStudentDAO;
 import dao.ObjectDAO;
 import dao.StudentDAO;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pojo.Class;
 import pojo.ClassObjectStudent;
@@ -180,6 +191,73 @@ public class frmMark extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        boolean existed = false;
+        FileInputStream f = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        
+        File selectedFile = null;
+        Scanner input = null;
+        
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+        
+        try {
+            f = new FileInputStream(selectedFile.getAbsolutePath()); //tao bien tep f
+            input = new Scanner(f,"UTF-8");
+            
+            while(input.hasNextLine()) //trong khi chưa het file
+            {
+                String line = input.nextLine(); //doc 1 dong
+                if(line.trim()!="") //neu dong khong phai rong
+                {
+                    
+                    String item[] = line.split(","); //cat cac thong tin cua line bang dau phay
+                   
+                    
+                    ClassObjectStudent tmpSd = new ClassObjectStudent();
+                    
+                    tmpSd.setClassCode(item[0]);
+                    tmpSd.setObjectCode(item[1]);
+                    tmpSd.setStudentCode(item[2]);
+                    tmpSd.setMark1(new BigDecimal(item[3]));
+                    tmpSd.setMark2(new BigDecimal(item[4]));
+                    tmpSd.setMark3(new BigDecimal(item[5]));
+                    tmpSd.setMark4(new BigDecimal(item[6]));
+                    tmpSd.setClassCode(item[0]);
+                    
+                    if (!ClassObjectStudentDAO.UpdateClassObjectStudent(tmpSd))
+                    {
+                        // fail
+                        existed = true;
+                    }
+                    
+                }
+            }
+            if (existed)
+                JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (FileNotFoundException ex) {
+            Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+        }        finally {
+            if (existed)
+            {
+                System.out.println("Tồn tại dữ liệu.");
+            }
+            if (f != null)
+                try {
+                    f.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            if (input != null)
+                input.close();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cboClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboClassActionPerformed
@@ -233,7 +311,7 @@ public class frmMark extends javax.swing.JDialog {
                 String result = "";
                 if (tempStudent != null)
                 {
-                    if (clsObjStus.get(i).getMark4() > 5)
+                    if (clsObjStus.get(i).getMark4().compareTo(BigDecimal.valueOf(5)) > 0)
                     {
                         pass++;
                         result = "Đậu";
