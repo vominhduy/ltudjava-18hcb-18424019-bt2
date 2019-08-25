@@ -60,6 +60,25 @@ public class ClassObjectStudentDAO {
         return ds;
     }
     
+    public static List<ClassObjectStudent> getObjectsByStudent(String studentCode) {
+        List<ClassObjectStudent> ds = null;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        Session session = sessionFactory.openSession();
+        
+        try {
+            String hql = "FROM pojo.ClassObjectStudent sv WHERE sv.studentCode =:studentCode";
+            Query query = session.createQuery(hql);
+            query.setString("studentCode", studentCode);
+            ds = query.list();
+        } catch (HibernateException ex) {
+//Log the exception
+            System.err.println(ex);
+        } finally {
+            session.close();
+        }
+        return ds;
+    }
+    
     public static ClassObjectStudent getObject(String objectCode, String studentCode) {
         List<ClassObjectStudent> ds = null;
         ClassObjectStudent tmp = null;
