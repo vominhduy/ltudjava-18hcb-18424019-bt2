@@ -109,6 +109,11 @@ public class frmMark extends javax.swing.JDialog {
                 "STT", "MSSV", "Họ và tên", "Điểm GK", "Điểm CK", "Điểm khác", "Điểm tổng", "Kết quả"
             }
         ));
+        tblStudent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStudentMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStudent);
 
         jLabel3.setText("Đậu");
@@ -340,6 +345,27 @@ public class frmMark extends javax.swing.JDialog {
             lblPass.setText(Float.toString(fail/(pass + fail)));
         }
     }//GEN-LAST:event_cboObjectActionPerformed
+
+    private void tblStudentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentMouseClicked
+        // TODO add your handling code here:
+        
+        frmChangeMark frm = new frmChangeMark(null, true);
+        
+
+        int row = tblStudent.getSelectedRow();
+        String valueInCell = (String)tblStudent.getValueAt(row, 1);
+        String valueInName = (String)tblStudent.getValueAt(row, 2);
+        
+        String objectCodeName = cboObject.getSelectedItem().toString();
+        
+        String objectCode = objectCodeName.substring(0, objectCodeName.indexOf(" - "));
+        
+        
+        frm.setData(cboClass.getSelectedItem().toString(), objectCode, valueInCell, objectCodeName, valueInName, true);
+        
+        frm.show();
+        frm.dispose();
+    }//GEN-LAST:event_tblStudentMouseClicked
 
     /**
      * @param args the command line arguments

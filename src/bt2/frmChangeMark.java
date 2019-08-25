@@ -6,7 +6,11 @@
 package bt2;
 
 import dao.ClassObjectStudentDAO;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import pojo.ClassObjectStudent;
 
 /**
@@ -17,6 +21,8 @@ public class frmChangeMark extends javax.swing.JDialog {
     String classCode = null;
     String objectCode = null;
     String studentCode = null;
+    
+    
     /**
      * Creates new form frmChangeMark
      */
@@ -25,7 +31,7 @@ public class frmChangeMark extends javax.swing.JDialog {
         initComponents();
     }
     
-    public void setData(String classCode, String objectCode, String studentCode, String objectName, String studentName)
+    public void setData(String classCode, String objectCode, String studentCode, String objectName, String studentName, boolean isAdmin)
     {
         this.classCode = classCode;
         this.objectCode = objectCode;
@@ -45,6 +51,16 @@ public class frmChangeMark extends javax.swing.JDialog {
             txtMark2.setText(tmp.getMark2().toString());
             txtMark3.setText(tmp.getMark3().toString());
             txtMark4.setText(tmp.getMark4().toString());
+        }
+        
+        if (!isAdmin){
+            txtMark1.disable();
+            txtMark2.disable();
+            txtMark3.disable();
+            txtMark4.disable();
+            
+            btnSave.disable();
+            btnCancel.disable();
         }
     }
 
@@ -108,6 +124,11 @@ public class frmChangeMark extends javax.swing.JDialog {
         });
 
         btnCancel.setText("Hủy");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -203,7 +224,64 @@ public class frmChangeMark extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
+        
+        Pattern pattern = Pattern.compile("[0-9]*\\.[0-9]+");
+        Matcher matcher1 = pattern.matcher(txtMark1.getText());
+        Matcher matcher2 = pattern.matcher(txtMark2.getText());
+        Matcher matcher3 = pattern.matcher(txtMark3.getText());
+        Matcher matcher4 = pattern.matcher(txtMark4.getText());
+        
+        if (!matcher1.matches() || !matcher2.matches() || !matcher3.matches() || !matcher4.matches())
+        {
+            JOptionPane.showMessageDialog(null, "Điểm số không hợp lệ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        BigDecimal mark1 = new BigDecimal(txtMark1.getText());
+        BigDecimal mark2 = new BigDecimal(txtMark2.getText());
+        BigDecimal mark3 = new BigDecimal(txtMark3.getText());
+        BigDecimal mark4 = new BigDecimal(txtMark4.getText());
+        
+        
+        if (mark1.compareTo(new BigDecimal(0)) < 0 || mark2.compareTo(new BigDecimal(0)) < 0 || 
+                mark3.compareTo(new BigDecimal(0)) < 0 || mark4.compareTo(new BigDecimal(0)) < 0 ||
+                mark1.compareTo(new BigDecimal(10)) > 0 || mark2.compareTo(new BigDecimal(10)) > 0 || 
+                mark3.compareTo(new BigDecimal(10)) > 0 || mark4.compareTo(new BigDecimal(10)) > 0)
+        {
+            JOptionPane.showMessageDialog(null, "Điểm số không hợp lệ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        List<ClassObjectStudent> tmps = ClassObjectStudentDAO.getObjects(classCode, objectCode, studentCode);
+        
+        if (tmps != null && tmps.size() > 0)
+        {
+            ClassObjectStudent tmp = tmps.get(0);
+            
+            tmp.setMark1(mark1);
+            tmp.setMark2(mark2);
+            tmp.setMark3(mark3);
+            tmp.setMark4(mark4);
+            
+            if (ClassObjectStudentDAO.UpdateClassObjectStudent(tmp))
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật điểm thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật điểm thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Không tồn tại sinh viên.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments
