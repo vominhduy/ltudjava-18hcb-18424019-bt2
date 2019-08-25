@@ -1,5 +1,5 @@
 package pojo;
-// Generated Aug 24, 2019 5:34:03 PM by Hibernate Tools 4.3.1
+// Generated Aug 25, 2019 9:30:34 AM by Hibernate Tools 4.3.1
 
 
 
@@ -13,15 +13,30 @@ public class ClassObjectStudent  implements java.io.Serializable {
      private String classCode;
      private String objectCode;
      private String studentCode;
+     private Long mark1;
+     private Long mark2;
+     private Long mark3;
+     private Long mark4;
 
     public ClassObjectStudent() {
     }
 
+	
     public ClassObjectStudent(int id, String classCode, String objectCode, String studentCode) {
+        this.id = id;
+        this.classCode = classCode;
+        this.objectCode = objectCode;
+        this.studentCode = studentCode;
+    }
+    public ClassObjectStudent(int id, String classCode, String objectCode, String studentCode, Long mark1, Long mark2, Long mark3, Long mark4) {
        this.id = id;
        this.classCode = classCode;
        this.objectCode = objectCode;
        this.studentCode = studentCode;
+       this.mark1 = mark1;
+       this.mark2 = mark2;
+       this.mark3 = mark3;
+       this.mark4 = mark4;
     }
    
     public int getId() {
@@ -51,6 +66,34 @@ public class ClassObjectStudent  implements java.io.Serializable {
     
     public void setStudentCode(String studentCode) {
         this.studentCode = studentCode;
+    }
+    public Long getMark1() {
+        return this.mark1;
+    }
+    
+    public void setMark1(Long mark1) {
+        this.mark1 = mark1;
+    }
+    public Long getMark2() {
+        return this.mark2;
+    }
+    
+    public void setMark2(Long mark2) {
+        this.mark2 = mark2;
+    }
+    public Long getMark3() {
+        return this.mark3;
+    }
+    
+    public void setMark3(Long mark3) {
+        this.mark3 = mark3;
+    }
+    public Long getMark4() {
+        return this.mark4;
+    }
+    
+    public void setMark4(Long mark4) {
+        this.mark4 = mark4;
     }
 
 

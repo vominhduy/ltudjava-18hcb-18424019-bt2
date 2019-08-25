@@ -3,13 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/java/bt2/src/bt2/frmClass.java</file>
+            <file>file:/D:/java/bt2/src/pojo/Class.java</file>
+            <file>file:/D:/java/bt2/src/bt2/frmStudent.java</file>
+            <file>file:/D:/java/bt2/src/pojo/ClassObjectStudent.java</file>
             <file>file:/D:/java/bt2/src/bt2/frmLogin.java</file>
             <file>file:/D:/java/bt2/src/dao/StudentDAO.java</file>
+            <file>file:/D:/java/bt2/src/dao/ClassObjectStudentDAO.java</file>
+            <file>file:/D:/java/bt2/src/pojo/Student.hbm.xml</file>
+            <file>file:/D:/java/bt2/src/pojo/ClassObjectStudent.hbm.xml</file>
+            <file>file:/D:/java/bt2/src/bt2/frmObject.java</file>
+            <file>file:/D:/java/bt2/src/bt2/frmClassObject.java</file>
             <file>file:/D:/java/bt2/src/util/HibernateUtil.java</file>
-            <file>file:/D:/java/bt2/src/bt2/frmAdmin.java</file>
+            <file>file:/D:/java/bt2/src/bt2/frmObjectStudent.java</file>
             <file>file:/D:/java/bt2/src/bt2/BT2.java</file>
             <file>file:/D:/java/bt2/src/dao/ClassDAO.java</file>
+            <file>file:/D:/java/bt2/src/bt2/frmClass.java</file>
+            <file>file:/D:/java/bt2/src/hibernate.reveng.xml</file>
+            <file>file:/D:/java/bt2/src/pojo/Object.java</file>
+            <file>file:/D:/java/bt2/src/hibernate1.cfg.xml</file>
+            <file>file:/D:/java/bt2/src/dao/ObjectDAO.java</file>
+            <file>file:/D:/java/bt2/src/bt2/frmAdmin.java</file>
             <file>file:/D:/java/bt2/src/hibernate.cfg.xml</file>
         </group>
     </open-files>

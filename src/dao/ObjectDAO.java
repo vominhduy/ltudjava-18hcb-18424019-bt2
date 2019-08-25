@@ -68,7 +68,9 @@ public class ObjectDAO {
             Query query = session.createQuery(hql);
             query.setString("code", code);
             ds = query.list();
-            obj = ds.get(0);
+            
+            if (ds != null && ds.size() > 0)
+                obj = ds.get(0);
         } catch (HibernateException ex) {
 //Log the exception
             System.err.println(ex);
