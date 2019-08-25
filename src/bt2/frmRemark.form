@@ -190,6 +190,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="H&#x1ee7;y c&#x1ead;p nh&#x1ead;t &#x111;i&#x1ec3;m"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

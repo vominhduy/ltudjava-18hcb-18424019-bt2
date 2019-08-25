@@ -5,12 +5,18 @@
  */
 package bt2;
 
+import dao.ClassObjectStudentDAO;
 import dao.ObjectDAO;
 import dao.RemarkDAO;
 import dao.RemarkDetailDAO;
 import dao.StudentDAO;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import pojo.ClassObjectStudent;
 import pojo.Remark;
 import pojo.RemarkDetail;
 import pojo.Student;
@@ -21,7 +27,6 @@ import pojo.Object;
  * @author vomin
  */
 public class frmRemark extends javax.swing.JDialog {
-
     /**
      * Creates new form frmRemark
      */
@@ -92,7 +97,7 @@ public class frmRemark extends javax.swing.JDialog {
                             }
                             
                             modeltable.insertRow(row, new java.lang.Object[]{row + 1, stu.getCode(), stu.getName(), 
-                                obj.getName(), remarkPoint, a.getRemarkExpect(), a.getRemarkActual(), a.getReason(),
+                                obj.getCode() + " - " + obj.getName(), remarkPoint, a.getRemarkExpect(), a.getRemarkActual(), a.getReason(),
                                 statusStr});
                             row++;
                         }
@@ -158,6 +163,11 @@ public class frmRemark extends javax.swing.JDialog {
         });
 
         btnCancel.setText("Hủy cập nhật điểm");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,7 +223,166 @@ public class frmRemark extends javax.swing.JDialog {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+        
+        int row = tblRemark.getSelectedRow();
+        String object = (String)tblRemark.getValueAt(row, 3);
+        String studetnCode = (String)tblRemark.getValueAt(row, 1);
+        String remarkPointStr = (String)tblRemark.getValueAt(row, 4);
+        
+        
+        
+        
+        
+        String objectCode = object.substring(0, object.indexOf(" - "));
+        
+        // get detail mark of student
+        ClassObjectStudent tmpCls = ClassObjectStudentDAO.getObject(objectCode, studetnCode);
+        
+        if (tmpCls != null)
+        {
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên học môn học này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        String mark = (String)tblRemark.getValueAt(row, 6);
+        
+        Pattern pattern = Pattern.compile("[0-9]*\\.[0-9]+");
+        Matcher matcher1 = pattern.matcher(mark);
+        
+        int remartPoint = 0;
+        
+        if (remarkPointStr.compareToIgnoreCase("Điểm GK") == 0)
+        {
+            remartPoint = 1;
+        }
+        else if (remarkPointStr.compareToIgnoreCase("Điểm CK") == 0)
+        {
+            remartPoint = 2;
+        }
+        else if (remarkPointStr.compareToIgnoreCase("Điểm khác") == 0)
+        {
+            remartPoint = 3;
+        }
+        else
+        {
+            remartPoint = 4;
+        }
+        
+        if (!matcher1.matches())
+        {
+            JOptionPane.showMessageDialog(null, "Điểm số không hợp lệ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        else
+        {
+            BigDecimal tmpBig = new BigDecimal(mark);
+            
+            if (remartPoint == 1)
+                tmpCls.setMark1(tmpBig);
+            else if (remartPoint == 2)
+                tmpCls.setMark2(tmpBig);
+            else if (remartPoint == 2)
+                tmpCls.setMark3(tmpBig);
+            else
+                tmpCls.setMark4(tmpBig);
+            
+            
+            ClassObjectStudent clsObjStu = ClassObjectStudentDAO.getObject(objectCode, studetnCode);
+            
+            if (clsObjStu != null)
+            {
+                RemarkDetail tmpRemarkDetail = RemarkDetailDAO.getRemarkDetail(objectCode, studetnCode, remartPoint);
+                
+                if (tmpRemarkDetail != null)
+                {
+                    tmpRemarkDetail.setRemarkActual(tmpBig);
+                    tmpRemarkDetail.setStatus(2);
+                    
+                    if (RemarkDetailDAO.UpdateRemarkDetail(tmpRemarkDetail))
+                    {
+                        // update mark to student
+                        if (ClassObjectStudentDAO.UpdateClassObjectStudent(tmpCls))
+                        {
+                            JOptionPane.showMessageDialog(null, "Cập nhật thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(null, "Lưu thông tin thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Lưu thông tin thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên đăng ký phúc khảo.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên học môn này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        
+        int row = tblRemark.getSelectedRow();
+        String object = (String)tblRemark.getValueAt(row, 3);
+        String studetnCode = (String)tblRemark.getValueAt(row, 1);
+        String remarkPointStr = (String)tblRemark.getValueAt(row, 4);
+        
+        String objectCode = object.substring(0, object.indexOf(" - "));
+        
+        int remartPoint = 0;
+        
+        if (remarkPointStr.compareToIgnoreCase("Điểm GK") == 0)
+        {
+            remartPoint = 1;
+        }
+        else if (remarkPointStr.compareToIgnoreCase("Điểm CK") == 0)
+        {
+            remartPoint = 2;
+        }
+        else if (remarkPointStr.compareToIgnoreCase("Điểm khác") == 0)
+        {
+            remartPoint = 3;
+        }
+        else
+        {
+            remartPoint = 4;
+        }
+        
+        RemarkDetail tmp = RemarkDetailDAO.getRemarkDetail(objectCode, studetnCode, remartPoint);
+        
+        if (tmp != null)
+        {
+            tmp.setStatus(3);
+            if (RemarkDetailDAO.UpdateRemarkDetail(tmp))
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên học môn này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments
