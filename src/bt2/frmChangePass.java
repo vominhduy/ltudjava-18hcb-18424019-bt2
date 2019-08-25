@@ -48,9 +48,9 @@ public class frmChangePass extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        txtOldPass = new javax.swing.JTextField();
-        txtNewPass = new javax.swing.JTextField();
-        txtReNewPass = new javax.swing.JTextField();
+        txtOldPass = new javax.swing.JPasswordField();
+        txtNewPass = new javax.swing.JPasswordField();
+        txtReNewPass = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -77,39 +77,33 @@ public class frmChangePass extends javax.swing.JDialog {
             }
         });
 
-        txtOldPass.setText("jTextField1");
-
-        txtNewPass.setText("jTextField2");
-
-        txtReNewPass.setText("jTextField3");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtReNewPass, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtNewPass)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSave)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnCancel))
-                            .addComponent(txtOldPass, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(96, 96, 96))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtOldPass, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtNewPass, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtReNewPass, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(jLabel1)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,10 +119,10 @@ public class frmChangePass extends javax.swing.JDialog {
                     .addComponent(jLabel3)
                     .addComponent(txtNewPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtReNewPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave)
                     .addComponent(btnCancel))
@@ -145,13 +139,25 @@ public class frmChangePass extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        
-        if (txtOldPass.getText().compareTo(pass) != 0)
+        if (String.valueOf(txtOldPass.getPassword()).isEmpty())
         {
             JOptionPane.showMessageDialog(null, "Sai mật khẩu cũ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        if (txtNewPass.getText().compareTo(txtReNewPass.getText()) != 0)
+        
+        String currentPass = null;
+        try {
+            currentPass = UserDAO.Md5(String.valueOf(txtOldPass.getPassword()));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(frmChangePass.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (pass.compareTo(currentPass) != 0)
+        {
+            JOptionPane.showMessageDialog(null, "Sai mật khẩu cũ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (String.valueOf(txtNewPass.getPassword()).compareTo(String.valueOf(txtReNewPass.getPassword())) != 0)
         {
             JOptionPane.showMessageDialog(null, "Mật khẩu mới không trùng nhau.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -171,6 +177,8 @@ public class frmChangePass extends javax.swing.JDialog {
         }
         
         try {
+            
+            tmp.setPassword(String.valueOf(txtNewPass.getPassword()));
             if (UserDAO.UpdateUser(tmp))
             {
                 JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -234,8 +242,8 @@ public class frmChangePass extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtNewPass;
-    private javax.swing.JTextField txtOldPass;
-    private javax.swing.JTextField txtReNewPass;
+    private javax.swing.JPasswordField txtNewPass;
+    private javax.swing.JPasswordField txtOldPass;
+    private javax.swing.JPasswordField txtReNewPass;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,15 +5,20 @@
  */
 package bt2;
 
+import dao.ClassObjectStudentDAO;
+import dao.ObjectDAO;
 import dao.RemarkDAO;
 import dao.RemarkDetailDAO;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import pojo.ClassObjectStudent;
 import pojo.Remark;
 import pojo.RemarkDetail;
+import pojo.Object;
 
 /**
  *
@@ -32,6 +37,30 @@ public class frmRegRemark extends javax.swing.JDialog {
     public void setData(String id)
     {
         this.id = id;
+        
+        List<ClassObjectStudent> tmps = ClassObjectStudentDAO.getObjectsByStudent(id);
+        
+        if (tmps != null && tmps.size() > 0)
+        {
+            for (int i = 0; i < tmps.size(); i++) {
+                ClassObjectStudent tmp = tmps.get(i);
+                
+                if (tmp.getMark4() != null){
+                    Object tmpObj = ObjectDAO.getObject(tmp.getObjectCode());
+                    
+                    if (tmpObj != null)
+                    {
+                        cboObject.addItem(tmp.getObjectCode() + " - " + tmpObj.getName());
+                    }
+                }
+                
+            }
+        }
+        
+        cboMark.addItem("Điểm GK");
+        cboMark.addItem("Điểm CK");
+        cboMark.addItem("Điểm khác");
+        cboMark.addItem("Điểm tổng");
     }
 
     /**
@@ -157,6 +186,7 @@ public class frmRegRemark extends javax.swing.JDialog {
         if (!matcher1.matches())
         {
             JOptionPane.showMessageDialog(null, "Điểm không hợp lệ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         Remark tmpRemark = RemarkDAO.getRemark();

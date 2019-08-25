@@ -178,33 +178,40 @@ public class frmObject extends javax.swing.JDialog {
         String [] ColumNames = {"STT", "Mã lớp", "Mã môn", "Tên môn", "Phòng học"};
         DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
         
-        
+        int row = 0;
         for(int i = 0; i < classObjectStudents.size(); i++)
         {
             ClassObjectStudent a = (ClassObjectStudent)classObjectStudents.get(i);
+            boolean objectExists = false;
+            for (int j = 0; j < tmpClsObjStu.size(); j++) {
+                if (tmpClsObjStu.get(j).compareTo(a.getObjectCode()) == 0)
+                {    
+                    objectExists = true;
+                    break;
+                }
+            }
             
-            if (tmpClsObjStu.contains(a.getObjectCode()))
+            if (objectExists)
                 continue;
             
             Object tmpObj = ObjectDAO.getObject(a.getObjectCode());
             if (tmpObj != null)
             {
                 tmpClsObjStu.add(tmpObj.getCode());
-                modeltable.insertRow(i, new java.lang.Object[]{i + 1, a.getClassCode(), a.getObjectCode(), tmpObj.getName(), tmpObj.getRoom()});
+                modeltable.insertRow(row, new java.lang.Object[]{row + 1, a.getClassCode(), a.getObjectCode(), tmpObj.getName(), tmpObj.getRoom()});
+                row++;
             }
         }
 
         tblObject.removeAll();
 
         tblObject.setModel(modeltable);
-        //jTableDSSV.setRowHeight(30);
-        tblObject.getColumnModel().getColumn(0).setPreferredWidth(150);
-        tblObject.getColumnModel().getColumn(1).setPreferredWidth(300);
     }//GEN-LAST:event_cboClassActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         frmObjectStudent frm = new frmObjectStudent(null, true);
+        frm.setTitle("18424019  -  Thêm sinh viên vào môn học");
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_btnAddActionPerformed

@@ -59,6 +59,7 @@ public class frmClass extends javax.swing.JDialog {
         tblStudents = new javax.swing.JTable();
         cboClass = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,6 +90,9 @@ public class frmClass extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setText("Quản lý lớp học");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,24 +102,29 @@ public class frmClass extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cboClass, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnImport)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboClass, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(249, 249, 249)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnImport)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnImport)
+                    .addComponent(cboClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
-                .addComponent(cboClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -147,7 +156,7 @@ public class frmClass extends javax.swing.JDialog {
                 String line = input.nextLine(); //doc 1 dong
                 if(line.trim()!="") //neu dong khong phai rong
                 {
-                    
+                    existed = false;
                     String item[] = line.split(","); //cat cac thong tin cua line bang dau phay
                     
                     String classCode = item[0];
@@ -160,19 +169,25 @@ public class frmClass extends javax.swing.JDialog {
                     tmpSd.setPid(item[4]);
                     tmpSd.setClassCode(item[0]);
                     
-                    for (Iterator<Student> iterator = students.iterator(); iterator.hasNext();) {
-                        Student next = iterator.next();
-                        if (next.getCode().compareTo(tmpSd.getCode()) == 0)
+                    for (int i = 0; i < students.size(); i++) {
+                        if (students.get(i).getCode().compareTo(tmpSd.getCode()) == 0)
                         {
                             existed = true;
-                            break;
                         }
                     }
                     
                     if (!existed)
                     {
                         Class cls = new Class(tmpSd.getClassCode(), tmpSd.getClassCode());
-                        if (!classes.contains(cls))
+                        boolean existsClass = false;
+                        for (int i = 0; i < classes.size(); i++) {
+                            if (classes.get(i).getCode().compareTo(cls.getCode()) == 0)
+                            {
+                                existsClass = true;
+                                break;
+                            }
+                        }
+                        if (!existsClass)
                         {
                             classes.add(cls);
                             ClassDAO.AddClass(cls);
@@ -182,21 +197,11 @@ public class frmClass extends javax.swing.JDialog {
                         {
                             students.add(tmpSd);
                         }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        break;
                     }
                 }
             }
-            if (existed)
-                JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            else
-                JOptionPane.showMessageDialog(null, "Import thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            
+            JOptionPane.showMessageDialog(null, "Import thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (FileNotFoundException ex) {
             Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
@@ -211,8 +216,12 @@ public class frmClass extends javax.swing.JDialog {
                 } catch (IOException ex) {
                     Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            if (input != null)
-                input.close();
+            if (input != null )
+                try {
+                    input.close();
+                } catch (Exception ex) {
+                    Logger.getLogger(frmClass.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
     }//GEN-LAST:event_btnImportActionPerformed
     
@@ -301,6 +310,7 @@ public class frmClass extends javax.swing.JDialog {
     private javax.swing.JButton btnImport;
     private javax.swing.JComboBox cboClass;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables

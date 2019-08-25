@@ -29,7 +29,7 @@ public class UserDAO {
         Session session = sessionFactory.openSession();
         
         try {
-            String hql = "SELECT sv FROM pojo.User sv WHERE sv.id =: id";
+            String hql = "SELECT sv FROM pojo.User sv WHERE sv.id =:id";
             Query query = session.createQuery(hql);
             query.setString("id", id);
             ds = query.list();
@@ -37,7 +37,6 @@ public class UserDAO {
             if (ds != null && ds.size() > 0)
             {    
                 tmp = ds.get(0);
-                tmp.setPassword(Md5(tmp.getPassword()));
             }
         } catch (HibernateException ex) {
 //Log the exception

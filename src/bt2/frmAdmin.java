@@ -24,6 +24,8 @@ public class frmAdmin extends javax.swing.JDialog {
     public frmAdmin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        lblName.setText("giaovu - giaovu");
     }
     
     public void setData(String id)
@@ -58,6 +60,11 @@ public class frmAdmin extends javax.swing.JDialog {
         });
 
         btnRemark.setText("Quản lý phúc khảo");
+        btnRemark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemarkActionPerformed(evt);
+            }
+        });
 
         btnObject.setText("Quản lý môn học");
         btnObject.addActionListener(new java.awt.event.ActionListener() {
@@ -67,6 +74,11 @@ public class frmAdmin extends javax.swing.JDialog {
         });
 
         btnMark.setText("Quản lý điểm");
+        btnMark.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMarkActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Đổi mật khẩu");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -130,6 +142,7 @@ public class frmAdmin extends javax.swing.JDialog {
         // TODO add your handling code here:
 
         frmClass frm = new frmClass(null, true);
+        frm.setTitle("18424019  -  Quản lý lớp học");
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_btnClassActionPerformed
@@ -137,6 +150,7 @@ public class frmAdmin extends javax.swing.JDialog {
     private void btnObjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObjectActionPerformed
         // TODO add your handling code here:
         frmObject frm = new frmObject(null, true);
+        frm.setTitle("18424019  -  Quản lý môn học");
         frm.show();
         frm.dispose();
     }//GEN-LAST:event_btnObjectActionPerformed
@@ -153,6 +167,7 @@ public class frmAdmin extends javax.swing.JDialog {
         if (current != null)
         {
             frmChangePass frm = new frmChangePass(null, true);
+            frm.setTitle("18424019  -  Đổi mật khẩu");
             frm.setData(current.getId(), current.getPassword());
             frm.show();
             frm.dispose();
@@ -167,6 +182,24 @@ public class frmAdmin extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnRemarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemarkActionPerformed
+        // TODO add your handling code here:
+        frmRemark frm = new frmRemark(null, true);
+        frm.setTitle("18424019  -  Quản lý phúc khảo");
+        
+        frm.show();
+        frm.dispose();
+    }//GEN-LAST:event_btnRemarkActionPerformed
+
+    private void btnMarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarkActionPerformed
+        // TODO add your handling code here:
+        frmMark frm = new frmMark(null, true);
+        frm.setTitle("18424019  -  Quản lý điểm");
+        
+        frm.show();
+        frm.dispose();
+    }//GEN-LAST:event_btnMarkActionPerformed
 
     /**
      * @param args the command line arguments

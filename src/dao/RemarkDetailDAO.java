@@ -46,7 +46,7 @@ public class RemarkDetailDAO {
         Session session = sessionFactory.openSession();
         
         try {
-            String hql = "SELECT sv FROM pojo.RemarkDetail sv WHERE sv.objectCode = :objectCode AND sv.studentCode =: studentCode AND sv.remarkPoint =: remarkPoint";
+            String hql = "SELECT sv FROM pojo.RemarkDetail sv WHERE sv.objectCode = :objectCode AND sv.studentCode =:studentCode AND sv.remarkPoint =:remarkPoint";
             Query query = session.createQuery(hql);
             query.setString("objectCode", objectCode);
             query.setString("studentCode", studentCode);

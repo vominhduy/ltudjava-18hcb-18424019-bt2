@@ -32,6 +32,11 @@ public class frmUser extends javax.swing.JDialog {
     public frmUser(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+    
+    public void setData(String id)
+    {
+        this.id = id;
         
         Student current = StudentDAO.getStudent(id);
         
@@ -71,11 +76,6 @@ public class frmUser extends javax.swing.JDialog {
                 tblMark.setModel(modeltable);
             }
         }
-    }
-    
-    public void setData(String id)
-    {
-        this.id = id;
     }
     
     /**
@@ -173,6 +173,7 @@ public class frmUser extends javax.swing.JDialog {
     private void btnRemarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemarkActionPerformed
         // TODO add your handling code here:
         frmRegRemark frm = new frmRegRemark(null, true);
+        frm.setTitle("18424019  -  Đăng ký phúc khảo");
         frm.setData(id);
         frm.show();
         frm.dispose();
@@ -195,6 +196,7 @@ public class frmUser extends javax.swing.JDialog {
         if (current != null)
         {
             frmChangePass frm = new frmChangePass(null, true);
+            frm.setTitle("18424019  -  Đổi mật khẩu");
             frm.setData(current.getId(), current.getPassword());
             frm.show();
             frm.dispose();

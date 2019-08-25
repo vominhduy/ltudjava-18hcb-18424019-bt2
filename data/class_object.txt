@@ -1,2 +1,1 @@
-17hcb,java,ltud java,c32
-17hcb,mmt,mang may tinh,c31
+17HCB,ltdt,Lý thuyết đồ thị,C41

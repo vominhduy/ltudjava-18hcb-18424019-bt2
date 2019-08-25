@@ -23,6 +23,7 @@ public class BT2 {
     public static void main(String[] args) {
         List<Class> temp = ClassDAO.getClasses();
         frmLogin lg = new frmLogin();
+        lg.setTitle("18424019  -  Đăng nhập");
         lg.show();
     }
 }
