@@ -11,6 +11,7 @@ import dao.RemarkDAO;
 import dao.RemarkDetailDAO;
 import dao.StudentDAO;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -139,6 +140,11 @@ public class frmRemark extends javax.swing.JDialog {
         jLabel2.setText("Thời gian phúc khảo");
 
         jButton1.setText("Cập nhật");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("đến");
 
@@ -383,6 +389,120 @@ public class frmRemark extends javax.swing.JDialog {
         }
         
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        Date start = null;
+        Date end = null;
+        try {
+            start = new Date(txtFrom.getText());
+            end = new Date(txtTo.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ngày không hợp lệ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        // save to db
+        Remark tmpRemark = RemarkDAO.getRemark();
+        
+        if (tmpRemark != null)
+        {
+            tmpRemark.setStart(start);
+            tmpRemark.setEnd(end);
+            if (RemarkDAO.UpdateRemark(tmpRemark))
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật ngày phúc khảo thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật ngày phúc khảo thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        else
+        {
+            tmpRemark = new Remark();
+            tmpRemark.setId(0);
+            tmpRemark.setStart(start);
+            tmpRemark.setEnd(end);
+            if (RemarkDAO.AddRemark(tmpRemark))
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật ngày phúc khảo thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Cập nhật ngày phúc khảo thất bại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+        
+        List<RemarkDetail> lst = RemarkDetailDAO.getRemarks(tmpRemark.getStart());
+        
+        if (lst != null && lst.size() > 0)
+        {
+            String [] ColumNames = {"STT", "MSSV", "Họ và tên", "Môn", "Điểm cần phúc khảo", "Điểm mong muốn", "Điểm thực tế", "Lý do", "Trạng thái"};
+            DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
+            
+            int row = 0;
+            for(int i = 0; i < lst.size(); i++)
+            {
+                RemarkDetail a = (RemarkDetail)lst.get(i);
+                
+                Student stu = StudentDAO.getStudent(a.getStudentCode());
+                
+                if (stu != null)
+                {
+                    Object obj = ObjectDAO.getObject(a.getObjectCode());
+                    
+                    if (obj != null)
+                    {
+                        String remarkPoint = "";
+                        String statusStr = "";
+                        int point = a.getRemarkPoint();
+                        if (point == 1)
+                        {
+                            remarkPoint = "Điểm GK";
+                        }
+                        else if (point == 2)
+                        {
+                            remarkPoint = "Điểm CK";
+                        }
+                        else if (point == 2)
+                        {
+                            remarkPoint = "Điểm khác";
+                        }
+                        else
+                        {
+                            remarkPoint = "Điểm tổng";
+                        }
+                        
+                        int status = a.getStatus();
+                        
+                        if (status == 1)
+                        {
+                            statusStr = "Chưa xem";
+                        }
+                        else if (status == 2)
+                        {
+                            statusStr = "Đã cập nhật";
+                        }
+                        else
+                        {
+                            statusStr = "Hủy cập nhật";
+                        }
+                        
+                        modeltable.insertRow(row, new java.lang.Object[]{row + 1, stu.getCode(), stu.getName(),
+                            obj.getCode() + " - " + obj.getName(), remarkPoint, a.getRemarkExpect(), a.getRemarkActual(), a.getReason(),
+                            statusStr});
+                        row++;
+                    }
+                }
+            }
+            
+            tblRemark.removeAll();
+            
+            tblRemark.setModel(modeltable);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

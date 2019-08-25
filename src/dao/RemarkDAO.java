@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import pojo.Remark;
 import pojo.Student;
 import util.HibernateUtil;
@@ -38,5 +39,45 @@ public class RemarkDAO {
             session.close();
         }
         return tmp;
+    }
+    
+    public static boolean UpdateRemark(Remark remark)
+    {
+        boolean kq = false;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
+        Session session = sessionFactory.getCurrentSession();
+        Transaction trans = session.getTransaction();
+        try {
+            trans.begin();
+            session.update(remark);
+            trans.commit();
+            kq = true;
+        } catch (Exception ex) {
+            kq = false;
+            trans.rollback();
+            System.out.println("ERROR BT2: " + ex.getMessage());
+        }
+        return kq;
+    }
+    
+    public static boolean AddRemark(Remark remark)
+    {
+        boolean kq = false;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
+        Session session = sessionFactory.getCurrentSession();
+        Transaction trans = session.getTransaction();
+        try {
+            trans.begin();
+            session.save(remark);
+            trans.commit();
+            kq = true;
+        } catch (Exception ex) {
+            kq = false;
+            trans.rollback();
+            System.out.println("ERROR BT2: " + ex.getMessage());
+        }
+        return kq;
     }
 }
