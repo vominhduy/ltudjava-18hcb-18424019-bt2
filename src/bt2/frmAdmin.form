@@ -27,11 +27,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btnClass" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnSchedule" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRemark" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="btnObject" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="btnMark" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="251" max="32767" attributes="0"/>
+              <EmptySpace pref="269" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -41,7 +41,7 @@
               <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Component id="btnClass" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-              <Component id="btnSchedule" min="-2" max="-2" attributes="0"/>
+              <Component id="btnRemark" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnObject" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -60,9 +60,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClassActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnSchedule">
+    <Component class="javax.swing.JButton" name="btnRemark">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd; th&#x1edd;i kh&#xf3;a bi&#x1ec3;u"/>
+        <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd; ph&#xfa;c kh&#x1ea3;o"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnObject">

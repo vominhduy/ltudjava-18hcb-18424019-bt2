@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Aug 25, 2019 10:05:30 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated Aug 25, 2019 11:51:13 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="pojo.RemarkDetail" table="remark_detail" catalog="manage" optimistic-lock="version">
         <id name="id" type="int">
@@ -17,11 +17,20 @@
         <property name="remarkPoint" type="int">
             <column name="RemarkPoint" not-null="true" />
         </property>
-        <property name="remarkExpect" type="short">
-            <column name="RemarkExpect" precision="3" scale="0" not-null="true" />
+        <property name="remarkExpect" type="big_decimal">
+            <column name="RemarkExpect" precision="3" scale="1" not-null="true" />
         </property>
         <property name="reason" type="string">
             <column name="Reason" length="200" not-null="true" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="CreateTime" length="19" />
+        </property>
+        <property name="remarkActual" type="big_decimal">
+            <column name="RemarkActual" precision="3" scale="1" />
+        </property>
+        <property name="status" type="java.lang.Integer">
+            <column name="Status" />
         </property>
     </class>
 </hibernate-mapping>

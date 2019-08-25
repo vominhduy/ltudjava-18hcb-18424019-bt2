@@ -29,7 +29,7 @@ public class frmAdmin extends javax.swing.JDialog {
     private void initComponents() {
 
         btnClass = new javax.swing.JButton();
-        btnSchedule = new javax.swing.JButton();
+        btnRemark = new javax.swing.JButton();
         btnObject = new javax.swing.JButton();
         btnMark = new javax.swing.JButton();
 
@@ -42,7 +42,7 @@ public class frmAdmin extends javax.swing.JDialog {
             }
         });
 
-        btnSchedule.setText("Quản lý thời khóa biểu");
+        btnRemark.setText("Quản lý phúc khảo");
 
         btnObject.setText("Quản lý môn học");
         btnObject.addActionListener(new java.awt.event.ActionListener() {
@@ -61,10 +61,10 @@ public class frmAdmin extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnClass)
-                    .addComponent(btnSchedule)
+                    .addComponent(btnRemark)
                     .addComponent(btnObject)
                     .addComponent(btnMark))
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -72,7 +72,7 @@ public class frmAdmin extends javax.swing.JDialog {
                 .addGap(36, 36, 36)
                 .addComponent(btnClass)
                 .addGap(45, 45, 45)
-                .addComponent(btnSchedule)
+                .addComponent(btnRemark)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnObject)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -144,6 +144,6 @@ public class frmAdmin extends javax.swing.JDialog {
     private javax.swing.JButton btnClass;
     private javax.swing.JButton btnMark;
     private javax.swing.JButton btnObject;
-    private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnRemark;
     // End of variables declaration//GEN-END:variables
 }
