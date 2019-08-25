@@ -82,4 +82,24 @@ public class RemarkDetailDAO {
         }
         return kq;
     }
+    
+    public static boolean AddRemarkDetail(RemarkDetail detail)
+    {
+        boolean kq = false;
+        SessionFactory sessionFactory = HibernateUtil.getSessionAnnotationFactory();
+        
+        Session session = sessionFactory.getCurrentSession();
+        Transaction trans = session.getTransaction();
+        try {
+            trans.begin();
+            session.save(detail);
+            trans.commit();
+            kq = true;
+        } catch (Exception ex) {
+            kq = false;
+            trans.rollback();
+            System.out.println("ERROR BT2: " + ex.getMessage());
+        }
+        return kq;
+    }
 }

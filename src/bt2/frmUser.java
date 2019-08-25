@@ -1,16 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package bt2;
 
+import dao.ClassObjectStudentDAO;
+import dao.ObjectDAO;
+import dao.StudentDAO;
 import dao.UserDAO;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import pojo.ClassObjectStudent;
+import pojo.Student;
 import pojo.User;
+import pojo.Object;
 
 /**
  *
@@ -24,13 +32,52 @@ public class frmUser extends javax.swing.JDialog {
     public frmUser(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Student current = StudentDAO.getStudent(id);
+        
+        if (current != null)
+        {
+            lblName.setText(id + " - " + current.getName() +  " - " + current.getGender() + " - Lớp " + current.getClassCode());
+            
+            // view bang diem
+            List<ClassObjectStudent> clsObjStus = ClassObjectStudentDAO.getObjectsByStudent(id);
+            
+            if (clsObjStus != null && clsObjStus.size() > 0)
+            {
+                int size = clsObjStus.size();
+                
+                String [] ColumNames = {"STT", "Mã môn", "Tên môn", "Điểm GK", "Điểm CK", "Điểm khác", "Điểm tổng"};
+                DefaultTableModel modeltable = new DefaultTableModel(null, ColumNames);
+                int row = 0;
+                for (int i = 0; i < size; i++) {
+                    ClassObjectStudent tmp = clsObjStus.get(i);
+                    
+                    
+                    Object tempObj = ObjectDAO.getObject(tmp.getObjectCode());
+                    
+                    if (tempObj == null)
+                    {
+                        continue;
+                    }
+                    
+                    
+                    modeltable.insertRow(row, new java.lang.Object[]{row + 1, tempObj.getCode(),
+                        tempObj.getName(), tmp.getMark1(), tmp.getMark2(), tmp.getMark3(), tmp.getMark4()});
+                    row++;
+                }
+                
+                tblMark.removeAll();
+                
+                tblMark.setModel(modeltable);
+            }
+        }
     }
     
     public void setData(String id)
     {
         this.id = id;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,16 +169,20 @@ public class frmUser extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnRemarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemarkActionPerformed
         // TODO add your handling code here:
+        frmRegRemark frm = new frmRegRemark(null, true);
+        frm.setData(id);
+        frm.show();
+        frm.dispose();
     }//GEN-LAST:event_btnRemarkActionPerformed
-
+    
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
-
+    
     private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePassActionPerformed
         // TODO add your handling code here:
         User current = null;
@@ -153,7 +204,7 @@ public class frmUser extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Không tồn tại sinh viên trong hệ thống.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnChangePassActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */
@@ -161,8 +212,8 @@ public class frmUser extends javax.swing.JDialog {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -180,7 +231,7 @@ public class frmUser extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(frmUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -195,7 +246,7 @@ public class frmUser extends javax.swing.JDialog {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangePass;
     private javax.swing.JButton btnLogout;

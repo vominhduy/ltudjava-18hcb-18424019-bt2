@@ -122,11 +122,20 @@ public class frmLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Sai tài khoản hoặc mật khẩu.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
             
-        
-        frmAdmin frm = new frmAdmin(null, true);
-        frm.setData(current.getId());
-        frm.show();
-        frm.dispose();
+        if (current.isIsAdmin())
+        {
+            frmAdmin frm = new frmAdmin(null, true);
+            frm.setData(current.getId());
+            frm.show();
+            frm.dispose();
+        }
+        else
+        {
+            frmUser frm = new frmUser(null, true);
+            frm.setData(current.getId());
+            frm.show();
+            frm.dispose();
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

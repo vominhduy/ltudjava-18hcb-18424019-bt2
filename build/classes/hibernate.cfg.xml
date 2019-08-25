@@ -8,6 +8,7 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/manage?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">123456</property>
+    <mapping resource="pojo/User.hbm.xml"/>
     <mapping resource="pojo/Class.hbm.xml"/>
     <mapping resource="pojo/Remark.hbm.xml"/>
     <mapping resource="pojo/ClassObjectStudent.hbm.xml"/>
